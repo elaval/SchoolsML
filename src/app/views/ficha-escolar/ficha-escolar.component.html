@@ -1,0 +1,39 @@
+<div *ngFor="let item of dataByYear">
+  <h2>{{item.year}}</h2>
+  <table class="table">
+    <tr>
+      <th>Est</th>
+      <th *ngFor="let colNum of columnRange">{{colNum + +item.year + 1}}</th>
+    </tr>
+    <tr *ngFor="let studentItem of item.items">
+      <td>
+        {{studentInfo(studentItem)}}
+      </td>
+      <td *ngFor="let colNum of columnRange" 
+        [ngClass]="studentItem.postBasica[colNum] && studentItem.postBasica[colNum].nivel"
+        [attr.title]="studentItem.postBasica[colNum] && cellTitle(studentItem.postBasica[colNum])"
+        >{{studentItem.postBasica[colNum] && cellLabel(studentItem.postBasica[colNum])}}
+      </td>
+    </tr>
+  </table>
+
+  <!--
+  <table class="table">
+    <tr>
+    ${range.map(e => `
+      <th>${+e + +agno + 1}</th>
+    `).join("")}
+
+    </tr>
+    ${data.map(d => `
+    <tr>
+    ${range.map(e => `
+      <td class="${cellClass(d.postBasica[e])}">${(d.postBasica[e] && cellLabel(d.postBasica[e])) || ""}</td>
+    `).join("")}
+
+    </tr>
+    `).join("")}
+    </table>
+    `
+    -->
+</div>
