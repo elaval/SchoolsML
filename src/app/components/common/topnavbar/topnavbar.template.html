@@ -22,7 +22,17 @@
                 </a>
             </li>
         </ul>
+        <form class="navbar-form navbar-left">
+            <select [(ngModel)]="dataService.selectedSchool" class="form-control" name="school" id="school">
+                <option  *ngFor="let item of dataService.mySchools" [ngValue]="item">{{item.nombre}}</option>
+            </select>
+        </form>
 
+        <form class="navbar-form navbar-left">
+            <select [(ngModel)]="dataService._selectedYear" (change)="dataService.changeYear()" class="form-control" name="years" id="years">
+                <option  *ngFor="let year of dataService.allYears" [ngValue]="year">{{year}}</option>
+            </select>
+        </form>
     </nav>
 </div>
 

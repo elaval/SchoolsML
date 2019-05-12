@@ -1,5 +1,13 @@
 td.EM {
   background-color: #ece2f0;
+  cursor: pointer;
+}
+
+td.EM.nem {
+  background-color: #ece2f0;
+  border: solid;
+
+  cursor: pointer;
 }
 
 td.ES {

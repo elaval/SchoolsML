@@ -17,22 +17,7 @@ export class EvolucionMatriculaComponent implements OnInit {
     ) { }
   
     ngOnInit() {
-      this.dataService.selectedCarreraObservable
-      .subscribe(carrera => {
-        if (carrera && carrera.codigo_unico) {
-          /*
-          this.dataService.dataMatricula(carrera.codigo_unico)
-          .then((data:MatriculaData) => {
-            this.data = data;
-            this.agnos = this.data.map(d => d.agno)
-            this.selectedYear = this.agnos[this.agnos.length-1]
-          })
-          .catch(err => {
-            console.error(err)
-          })
-          */
-        }
-      })
+
   
     }
   

@@ -14,6 +14,12 @@ export class FichaEscolarComponent implements OnInit {
   selectedYear: any;
   columnRange: number[];
   dataByYear: { year: string; items: any; }[];
+  params: any;
+  dataByYearDict: { year: string; items: any; }[];
+  selectedData: any;
+  selectedYearStatistics: any;
+  sortedHighSchools: any[];
+  sortedProgramasEdSup: any[];
 
   constructor(
     private dataService: DataService
@@ -25,11 +31,47 @@ export class FichaEscolarComponent implements OnInit {
     .then((data:MatriculaData) => {
       this.data = data;
       this.processData(data)
-      //this.agnos = this.data.map(d => d.agno)
-      //this.selectedYear = this.agnos[this.agnos.length-1]
 
+      this.dataService.params.subscribe(params => {
+        if (params) {
+          this.params = params;
+          this.selectedYear = params.years && params.years[0];
+  
+          this.selectedData = this.dataByYearDict[this.selectedYear]
+        }
+      })
     })
 
+    this.dataService.selectedYear.subscribe(year => {
+      if (year) {
+        this.selectedYear = year;
+        this.selectedData = this.dataByYearDict && this.dataByYearDict[this.selectedYear]
+      }
+    })
+
+    this.dataService.paramsSelectedYear.subscribe(statistics => {
+      if (statistics) {
+        this.selectedYearStatistics = statistics;
+        this.setSortedHighSchools(statistics.highSchools);
+        this.setSortedProgramasEdSup(statistics.edSupPrograms)
+      } 
+    })
+  }
+
+  setSortedHighSchools(highSchools) {
+    this.sortedHighSchools = []
+    if (highSchools) {
+      this.sortedHighSchools = _.chain(highSchools)
+      .map(d => d).sortBy(d => -d.numStudents).value();
+    }
+  }
+
+  setSortedProgramasEdSup(programas) {
+    this.sortedProgramasEdSup = []
+    if (programas) {
+      this.sortedProgramasEdSup = _.chain(programas)
+      .map(d => d).sortBy(d => `${d.tipoInstitucion}`).value();
+    }
   }
 
   cellLabel(d) {
@@ -52,6 +94,21 @@ export class FichaEscolarComponent implements OnInit {
     }
   }
 
+  isNem(d,i) {
+    if (d && d.fullRecord) {
+      const year = +this.selectedYear + i +1;
+      const yearEgreso = d.fullRecord.nem && +d.fullRecord.nem.AGNO_EGRESO;
+      if (year == yearEgreso) {
+        return true
+      } else {
+        return false
+      }
+    } 
+ 
+  }
+
+
+  
   studentInfo(d) {
     if (d && d.record8vo) {
       return `${d.record8vo.gen_alu == "1" ? "H" : "M"} (${d.record8vo.edad_alu})`
@@ -63,50 +120,13 @@ export class FichaEscolarComponent implements OnInit {
     this.columnRange = _.range(0,maxColumns);
 
     this.dataByYear = _.chain(data).map((items,key) => ({year: key, items:items})).value();
+    this.dataByYearDict = data;
+    this.selectedData = this.dataByYearDict[this.selectedYear]
 
-    /*
-    display = {
-      const maxColumns =  _.chain(egresadosXagno).map((items,key) =>  _.max(items.map(d => d.postBasica.length))).max(d => d).value();
-      
-      const range = _.range(0,maxColumns)
-      
-      function table(data, agno)  {
-        return `
-        <table class="table">
-        <tr>
-        ${range.map(e => `
-          <th>${+e + +agno + 1}</th>
-        `).join("")}
-    
-        </tr>
-        ${data.map(d => `
-        <tr>
-        ${range.map(e => `
-          <td class="${cellClass(d.postBasica[e])}">${(d.postBasica[e] && cellLabel(d.postBasica[e])) || ""}</td>
-        `).join("")}
-    
-        </tr>
-        `).join("")}
-        </table>
-        `
-      }
-      
-      return html`${
-      _.map(egresadosXagno, (items, agno) => `
-      <h3>${agno} en 8º Básico</h3>
-      ${table(items, agno)}
-      `).join("")
-      }`
-      
-      return table(egresadosXagno["2006"])
-      
-    
-    }
-    */
   }
 
-  changeYear(year) {
-    this.selectedYear = year;
+  changeYear() {
+    this.selectedData = this.dataByYearDict[this.selectedYear]
   }
 
 

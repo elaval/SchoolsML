@@ -1,0 +1,1 @@
+export const FILE_DIRECTORIO_PATH = "establecimientos/directorio.tsv";

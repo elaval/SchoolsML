@@ -10,6 +10,12 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+
+
 
 import { environment } from '../environments/environment';
 import { HomeComponent } from './views//home/home.component';
@@ -49,7 +55,10 @@ import { TdEvolucionMatriculaComponent } from './vis/td-evolucion-matricula/td-e
     NgbModule,
     HttpClientModule,
     ReactiveFormsModule,
-    LayoutsModule
+    LayoutsModule,
+    OverlayModule,
+    BrowserAnimationsModule,
+    MatTooltipModule
   ],
   providers: [
     AuthService,
