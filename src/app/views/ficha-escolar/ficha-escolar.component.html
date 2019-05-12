@@ -44,7 +44,7 @@
                   </tr>
                 </table>  
 
-                <div class="text-muted">Nota: Un estudiante puede registrar matrícula en multiples liceos a lo largo del tiempo</div>
+                <div class="text-muted">Nota: El mismo estudiante puede registrar matrícula en multiples liceos a lo largo del tiempo</div>
           </div>
       </div>
 
@@ -74,7 +74,7 @@
                     </td>
                   </tr>
                 </table> 
-                <div class="text-muted">Nota: Un estudiante puede registrar matrícula en multiples carreras a lo largo del tiempo</div>
+                <div class="text-muted">Nota: El mismo estudiante puede registrar matrícula en multiples carreras a lo largo del tiempo</div>
 
           </div>
       </div>
@@ -84,7 +84,7 @@
 </div>
 <div class="ibox ">
     <div class="ibox-title">
-      <h5>Detalle de cada estudiante en 8º el año {{selectedYear}}</h5>
+      <h5>Detalle de cada estudiante matriculado en 8º el año {{selectedYear}}</h5>
     </div>
     <div class="ibox-content">
 
@@ -94,8 +94,10 @@
               <th *ngFor="let colNum of columnRange">{{colNum + +selectedYear + 1}}</th>
             </tr>
             <tr *ngFor="let studentItem of selectedData; index as i">
-              <td>
-                  {{i}}) {{studentInfo(studentItem)}}
+              <td
+              [matTooltip]="studentDetailedInfo(studentItem)"
+              >
+                  {{i+1}}) {{studentBasicInfo(studentItem)}}
               </td>
               <td *ngFor="let colNum of columnRange" 
                 [matTooltip]="studentItem.postBasica[colNum] && cellTitle(studentItem.postBasica[colNum])"

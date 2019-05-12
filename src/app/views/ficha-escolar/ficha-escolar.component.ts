@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
 import { MatriculaData } from 'src/app/models/matricula';
 import * as _ from "lodash";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-ficha-escolar',
@@ -109,9 +110,15 @@ export class FichaEscolarComponent implements OnInit {
 
 
   
-  studentInfo(d) {
+  studentDetailedInfo(d) {
     if (d && d.record8vo) {
-      return `${d.record8vo.gen_alu == "1" ? "H" : "M"} (${d.record8vo.edad_alu})`
+      return `${d.record8vo.gen_alu == "1" ? "Hombre" : "Mujer"}, ${d.record8vo.edad_alu} años (${d.record8vo.gen_alu == "1" ? "Nacido" : "Nacida"}: ${moment(d.record8vo.fec_nac_alu,"YYYYMMDD").format("MMM YYYY")})`
+    }
+  }
+
+  studentBasicInfo(d) {
+    if (d && d.record8vo) {
+      return `${d.record8vo.gen_alu == "1" ? "H" : "M"}`
     }
   }
 
