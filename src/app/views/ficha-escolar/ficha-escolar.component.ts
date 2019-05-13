@@ -21,6 +21,7 @@ export class FichaEscolarComponent implements OnInit {
   selectedYearStatistics: any;
   sortedHighSchools: any[];
   sortedProgramasEdSup: any[];
+  validUser: boolean;
 
   constructor(
     private dataService: DataService
@@ -28,6 +29,28 @@ export class FichaEscolarComponent implements OnInit {
 
   ngOnInit() {
 
+    this.dataService.data.subscribe((data:MatriculaData) => {
+      if (data) {
+        this.data = data;
+        this.processData(data)
+  
+        this.dataService.params.subscribe(params => {
+          if (params) {
+            this.params = params;
+            this.selectedYear = params.years && params.years[0];
+    
+            this.selectedData = this.dataByYearDict[this.selectedYear]
+          }
+        })
+      }
+
+      this.dataService.validUser.subscribe(d => {
+        this.validUser = d;
+      })
+      
+    })
+
+    /*
     this.dataService.getDataFlujoEscolar()
     .then((data:MatriculaData) => {
       this.data = data;
@@ -42,6 +65,7 @@ export class FichaEscolarComponent implements OnInit {
         }
       })
     })
+    */
 
     this.dataService.selectedYear.subscribe(year => {
       if (year) {

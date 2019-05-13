@@ -12,8 +12,6 @@ export class AuthService {
   userSubject = new BehaviorSubject(null);
   user = this.userSubject.asObservable();
 
-
-
   constructor(
     public afAuth: AngularFireAuth
   ) { 
@@ -37,6 +35,7 @@ export class AuthService {
   tryGoogleLogin() {
     this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
   }
+
   logout() {
     this.afAuth.auth.signOut();
   }

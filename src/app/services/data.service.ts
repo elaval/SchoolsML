@@ -26,6 +26,9 @@ export class DataService {
   dataCarrera: Object;
   data_matricula: any;
 
+  validUserSubjet = new BehaviorSubject(false);
+  validUser = this.validUserSubjet.asObservable();
+
   dataSubjet = new BehaviorSubject(null);
   data = this.dataSubjet.asObservable();
 
@@ -70,6 +73,8 @@ export class DataService {
           .then((data:[]) => {
             this.mySchools = data.map(d => this.directorio[d]);
             this.selectedSchool = this.mySchools && this.mySchools[0];
+            this.getDataFlujoEscolar2(this.selectedSchool)
+            this.validUserSubjet.next(true);
           })
         })
       });
@@ -77,12 +82,30 @@ export class DataService {
     })
   }
 
+  
+  getDataFlujoEscolar2(school) {
+    const ref = this.storage.ref(`establecimientos/${school.rbd}/flujo8vo.json`);
+    ref.getDownloadURL().subscribe(url => {
+      this.http.get(url).toPromise()
+      .then(data => {
+        this.data_flujo = data;
+        this.getDataParameters(data);
+        this.dataSubjet.next(data);
+      })
+      .catch(err => {
+        this.dataSubjet.error(err)
+      });
+
+    })
+  }
+
+  /*
   getDataFlujoEscolar() {
     return new Promise((resolve, reject) => {
       if (this.data_flujo) {
         resolve(this.data_flujo)
       } else {
-        const ref = this.storage.ref('establecimientos/5774/flujo8vo_5774.json');
+        const ref = this.storage.ref(`establecimientos/${school}/flujo8vo.json`);
         ref.getDownloadURL().subscribe(url => {
           this.http.get(url).toPromise()
           .then(data => {
@@ -98,6 +121,7 @@ export class DataService {
       }
     })
   }
+  */
 
   getDataParameters(data) {
     this.allStudents = new StudentCollection();
@@ -134,8 +158,8 @@ export class DataService {
       this.authService.user.subscribe(user => {
         this.user = user;
   
-        if (user && user.uid) {  
-          this.fireStore.collection("users").doc(user.uid).get().subscribe((d) => {
+        if (user && user.email) {  
+          this.fireStore.collection("users").doc(user.email).get().subscribe((d) => {
             const userData = d.data();
             this.mySchools = userData && userData.schools || [];
             resolve(userData && userData.schools)
@@ -192,6 +216,10 @@ export class DataService {
     yearStatistics["edSupPrograms"] = yearEdSupPrograms;
 
     this.paramsSelectedYearSubjet.next(yearStatistics)
+  }
+
+  changeSchool() {
+    this.getDataFlujoEscolar2(this.selectedSchool)
   }
  
 }

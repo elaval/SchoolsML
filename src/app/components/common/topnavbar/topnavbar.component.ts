@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { smoothlyMenu } from '../../../app.helpers';
 import { DataService } from 'src/app/services/data.service';
+import { AuthService } from 'src/app/services/auth.service';
 declare var jQuery: any;
 
 @Component({
@@ -12,7 +13,8 @@ export class TopnavbarComponent {
     searchText: string;
 
     constructor(
-        private dataService:DataService
+        private dataService:DataService,
+        private authService:AuthService
     ) {}
 
     toggleNavigation(): void {
@@ -20,6 +22,9 @@ export class TopnavbarComponent {
         smoothlyMenu();
     }
 
+    logout() {
+        this.authService.logout();
+    }
 
 
     onEnter(question) {

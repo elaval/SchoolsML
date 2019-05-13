@@ -8,6 +8,7 @@ import { blankComponent } from './components/common/layouts/blank.component';
 import { DestinoESComponent } from './views/destino-es/destino-es.component';
 import { OrigenESComponent } from './views/origen-es/origen-es.component';
 import { FichaEscolarComponent } from './views/ficha-escolar/ficha-escolar.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   // Main redirect
@@ -25,6 +26,12 @@ const routes: Routes = [
     path: 'login', component: basicComponent,
     children: [
       {path: '', component: LoginComponent},
+    ]
+  },
+  {
+    path: 'register', component: basicComponent,
+    children: [
+      {path: '', component: RegisterComponent},
     ]
   },
   //{ path: 'main', component: MainComponent },

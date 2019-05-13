@@ -1,114 +1,125 @@
-<h1>Información del total de estudiantes que estuvieron matriculados en 8º Básico entre {{params.yearsRange[0]}} y {{params.yearsRange[1]}}</h1>
-
-<div *ngIf="params && params.statistics" class="well">
-  Se tienen registros de <span class="label label-info">{{params.statistics.count}}</span> estudiantes matriculados en 8º Básico entre los años {{params.yearsRange[0]}} y {{params.yearsRange[1]}}<br>
-  <p></p>
-  <span class="label label-info">{{params.statistics.nem}}</span> tienen registro final de <span class="label label-info">Enseñanza Media</span><br><br>
-  <span class="label label-info">{{params.statistics.edsup}}</span> registran matrícula en <span class="label label-info">Educación Superior</span><br>
+<div *ngIf="!validUser">
+  <h2>Validando si hay datos de escuelas asociados a su cuenta de usuario</h2>
+  Si no se presentan datos, contacte a TIDE SA para verificar la habilitación de su cuenta.
 </div>
 
-<h1>Información de estudiantes matriculados en 8º Básico el año seleccionado ({{selectedYear}})</h1>
-
-<div *ngIf="selectedYearStatistics" class = "well">
-  Se tienen registros de <span class="label label-info">{{selectedYearStatistics.count}}</span> estudiantes matriculados en 8º Básico el año {{selectedYear}}<br>
-  <p></p>
-  <span class="label label-info">{{selectedYearStatistics.nem}}</span> tienen registro final de <span class="label label-info">Enseñanza Media</span><br><br>
-  <span class="label label-info">{{selectedYearStatistics.edsup}}</span> registran matrícula en <span class="label label-info">Educación Superior</span><br>
+<div *ngIf="validUser && !params">
+  <h2>Cargando datos ...</h2>
 </div>
 
+<div *ngIf="params && selectedData">
+  <h1>Información del total de estudiantes que estuvieron matriculados en 8º Básico entre {{params.yearsRange[0]}} y {{params.yearsRange[1]}}</h1>
 
-
-<div class="row">
-  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <div class="ibox ">
-          <div class="ibox-title">
-            <h5>Liceos o colegios en los hay matricula registrada después de 8º Básico</h5>
-          </div>
-          <div class="ibox-content">
-              <table class="table">
-                  <tr>
-                    <th>Liceo</th>
-                    <th>Comuna</th>
-                    <th>Numero Estudiantes</th>
-                  </tr>
-                  <tr *ngFor="let item of sortedHighSchools">
-                    <td>
-                      {{item.name}}
-                    </td>    
-                    <td>
-                      {{item.comuna}}
-                    </td>
-                    <td>
-                      {{item.numStudents}}
-                    </td>
-                  </tr>
-                </table>  
-
-                <div class="text-muted">Nota: El mismo estudiante puede registrar matrícula en multiples liceos a lo largo del tiempo</div>
-          </div>
-      </div>
-
-
-  </div>  
-  <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <div class="ibox ">
-          <div class="ibox-title">
-            <h5>Carreras en las que hay matricula registrada</h5>
-          </div>
-          <div class="ibox-content">
-              <table class="table">
-                  <tr>
-                    <th>Carrera</th>
-                    <th>Institucion</th>
-                    <th>Numero Estudiantes</th>
-                  </tr>
-                  <tr *ngFor="let item of sortedProgramasEdSup">
-                    <td>
-                      {{item.carrera}}
-                    </td>    
-                    <td>
-                      {{item.institucion}}
-                    </td>
-                    <td>
-                      {{item.numStudents}}
-                    </td>
-                  </tr>
-                </table> 
-                <div class="text-muted">Nota: El mismo estudiante puede registrar matrícula en multiples carreras a lo largo del tiempo</div>
-
-          </div>
-      </div>
-
+  <div *ngIf="params && params.statistics" class="well">
+    Se tienen registros de <span class="label label-info">{{params.statistics.count}}</span> estudiantes matriculados en 8º Básico entre los años {{params.yearsRange[0]}} y {{params.yearsRange[1]}}<br>
+    <p></p>
+    <span class="label label-info">{{params.statistics.nem}}</span> tienen registro final de <span class="label label-info">Enseñanza Media</span><br><br>
+    <span class="label label-info">{{params.statistics.edsup}}</span> registran matrícula en <span class="label label-info">Educación Superior</span><br>
   </div>
-  
-</div>
-<div class="ibox ">
-    <div class="ibox-title">
-      <h5>Detalle de cada estudiante matriculado en 8º el año {{selectedYear}}</h5>
-    </div>
-    <div class="ibox-content">
 
-        <table class="table">
-            <tr>
-              <th>Estudiante</th>
-              <th *ngFor="let colNum of columnRange">{{colNum + +selectedYear + 1}}</th>
-            </tr>
-            <tr *ngFor="let studentItem of selectedData; index as i">
-              <td
-              [matTooltip]="studentDetailedInfo(studentItem)"
-              >
-                  {{i+1}}) {{studentBasicInfo(studentItem)}}
-              </td>
-              <td *ngFor="let colNum of columnRange" 
-                [matTooltip]="studentItem.postBasica[colNum] && cellTitle(studentItem.postBasica[colNum])"
-                [ngClass]="studentItem.postBasica[colNum] && studentItem.postBasica[colNum].nivel"
-                [class.nem]="isNem(studentItem,colNum)"
-                
-                >{{studentItem.postBasica[colNum] && cellLabel(studentItem.postBasica[colNum])}}
-              </td>
-            </tr>
-          </table>
+  <h1>Información de estudiantes matriculados en 8º Básico el año seleccionado ({{selectedYear}})</h1>
+
+  <div *ngIf="selectedYearStatistics" class = "well">
+    Se tienen registros de <span class="label label-info">{{selectedYearStatistics.count}}</span> estudiantes matriculados en 8º Básico el año {{selectedYear}}<br>
+    <p></p>
+    <span class="label label-info">{{selectedYearStatistics.nem}}</span> tienen registro final de <span class="label label-info">Enseñanza Media</span><br><br>
+    <span class="label label-info">{{selectedYearStatistics.edsup}}</span> registran matrícula en <span class="label label-info">Educación Superior</span><br>
+  </div>
+
+
+
+  <div class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="ibox ">
+            <div class="ibox-title">
+              <h5>Liceos o colegios en los hay matricula registrada después de 8º Básico</h5>
+            </div>
+            <div class="ibox-content">
+                <table class="table">
+                    <tr>
+                      <th>Liceo</th>
+                      <th>Comuna</th>
+                      <th>Numero Estudiantes</th>
+                    </tr>
+                    <tr *ngFor="let item of sortedHighSchools">
+                      <td>
+                        {{item.name}}
+                      </td>    
+                      <td>
+                        {{item.comuna}}
+                      </td>
+                      <td>
+                        {{item.numStudents}}
+                      </td>
+                    </tr>
+                  </table>  
+
+                  <div class="text-muted">Nota: El mismo estudiante puede registrar matrícula en multiples liceos a lo largo del tiempo</div>
+            </div>
+        </div>
+
+
+    </div>  
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="ibox ">
+            <div class="ibox-title">
+              <h5>Carreras en las que hay matricula registrada</h5>
+            </div>
+            <div class="ibox-content">
+                <table class="table">
+                    <tr>
+                      <th>Carrera</th>
+                      <th>Institucion</th>
+                      <th>Numero Estudiantes</th>
+                    </tr>
+                    <tr *ngFor="let item of sortedProgramasEdSup">
+                      <td>
+                        {{item.carrera}}
+                      </td>    
+                      <td>
+                        {{item.institucion}}
+                      </td>
+                      <td>
+                        {{item.numStudents}}
+                      </td>
+                    </tr>
+                  </table> 
+                  <div class="text-muted">Nota: El mismo estudiante puede registrar matrícula en multiples carreras a lo largo del tiempo</div>
+
+            </div>
+        </div>
+
     </div>
+    
+  </div>
+  <div class="ibox ">
+      <div class="ibox-title">
+        <h5>Detalle de cada estudiante matriculado en 8º el año {{selectedYear}}</h5>
+      </div>
+      <div class="ibox-content">
+
+          <table class="table">
+              <tr>
+                <th>Estudiante</th>
+                <th *ngFor="let colNum of columnRange">{{colNum + +selectedYear + 1}}</th>
+              </tr>
+              <tr *ngFor="let studentItem of selectedData; index as i">
+                <td
+                [matTooltip]="studentDetailedInfo(studentItem)"
+                >
+                    {{i+1}}) {{studentBasicInfo(studentItem)}}
+                </td>
+                <td *ngFor="let colNum of columnRange" 
+                  [matTooltip]="studentItem.postBasica[colNum] && cellTitle(studentItem.postBasica[colNum])"
+                  [ngClass]="studentItem.postBasica[colNum] && studentItem.postBasica[colNum].nivel"
+                  [class.nem]="isNem(studentItem,colNum)"
+                  
+                  >{{studentItem.postBasica[colNum] && cellLabel(studentItem.postBasica[colNum])}}
+                </td>
+              </tr>
+            </table>
+      </div>
+  </div>
 </div>
 
 

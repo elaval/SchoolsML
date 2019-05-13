@@ -31,6 +31,7 @@ import { OrigenESComponent } from './views/origen-es/origen-es.component';
 import { DestinoESComponent } from './views/destino-es/destino-es.component';
 import { FichaEscolarComponent } from './views/ficha-escolar/ficha-escolar.component';
 import { TdEvolucionMatriculaComponent } from './vis/td-evolucion-matricula/td-evolucion-matricula.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TdEvolucionMatriculaComponent } from './vis/td-evolucion-matricula/td-e
     DestinoESComponent,
     FichaEscolarComponent,
     TdEvolucionMatriculaComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
