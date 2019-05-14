@@ -12,11 +12,11 @@ import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   // Main redirect
-  {path: '', redirectTo: 'carrera/ficha-escolar', pathMatch: 'full'},
+  {path: '', redirectTo: 'k12/ficha-escolar', pathMatch: 'full'},
 
   // App views
   {
-    path: 'carrera', component: basicComponent,
+    path: 'k12', component: basicComponent,
     children: [
       {path: 'ficha-escolar', component: FichaEscolarComponent},
     ]
