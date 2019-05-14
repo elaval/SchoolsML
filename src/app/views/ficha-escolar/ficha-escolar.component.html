@@ -1,6 +1,6 @@
 <div *ngIf="!validUser">
-  <h2>Validando si hay datos de escuelas asociados a su cuenta de usuario</h2>
-  Si no se presentan datos, contacte a TIDE SA para verificar la habilitación de su cuenta.
+  <h2>Su cuenta de usuario no tiene escuelas asignada</h2>
+  Por favor contactar al proveedor de servicio EduTrack para verificar si tiene activada licencia de uso.
 </div>
 
 <div *ngIf="validUser && !params">
@@ -8,19 +8,19 @@
 </div>
 
 <div *ngIf="params && selectedData">
-  <h1>Información del total de estudiantes que estuvieron matriculados en 8º Básico entre {{params.yearsRange[0]}} y {{params.yearsRange[1]}}</h1>
+  <h1>{{params.yearsRange[0]}} a {{params.yearsRange[1]}} - Resumen del total de estudiantes que estuvieron matriculados en 8º Básico</h1>
 
   <div *ngIf="params && params.statistics" class="well">
-    Se tienen registros de <span class="label label-info">{{params.statistics.count}}</span> estudiantes matriculados en 8º Básico entre los años {{params.yearsRange[0]}} y {{params.yearsRange[1]}}<br>
+    <span class="label label-info">{{params.statistics.count}}</span> estudiantes matriculados en 8º Básico entre los años {{params.yearsRange[0]}} y {{params.yearsRange[1]}}<br>
     <p></p>
     <span class="label label-info">{{params.statistics.nem}}</span> tienen registro final de <span class="label label-info">Enseñanza Media</span><br><br>
     <span class="label label-info">{{params.statistics.edsup}}</span> registran matrícula en <span class="label label-info">Educación Superior</span><br>
   </div>
 
-  <h1>Información de estudiantes matriculados en 8º Básico el año seleccionado ({{selectedYear}})</h1>
+  <h1><span class="strong">{{selectedYear}}</span> Información de estudiantes matriculados en 8º Básico el año seleccionado</h1>
 
   <div *ngIf="selectedYearStatistics" class = "well">
-    Se tienen registros de <span class="label label-info">{{selectedYearStatistics.count}}</span> estudiantes matriculados en 8º Básico el año {{selectedYear}}<br>
+    <span class="label label-info">{{selectedYearStatistics.count}}</span> estudiantes matriculados en 8º Básico el año {{selectedYear}}<br>
     <p></p>
     <span class="label label-info">{{selectedYearStatistics.nem}}</span> tienen registro final de <span class="label label-info">Enseñanza Media</span><br><br>
     <span class="label label-info">{{selectedYearStatistics.edsup}}</span> registran matrícula en <span class="label label-info">Educación Superior</span><br>

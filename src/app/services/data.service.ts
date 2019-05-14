@@ -49,6 +49,7 @@ export class DataService {
   allStudentsStatistics: {};
   _selectedYear: string;
   studentsPerYear: {};
+  userData = null;
 
   constructor(
     private authService: AuthService,
@@ -60,24 +61,33 @@ export class DataService {
     this.authService.user.subscribe(user => {
       this.user = user;
 
-      const ref = this.storage.ref(FILE_DIRECTORIO_PATH);
-      ref.getDownloadURL().subscribe(url => {
-        
-        d3.tsv(url)
-        .then(data => {
-          data.forEach(d => {
-            this.directorio[d.rbd] = d;
-          })
+      this.getValidUserData()
+      .then(()=> {
+        const ref = this.storage.ref(FILE_DIRECTORIO_PATH);
 
-          this.getMySchools()
-          .then((data:[]) => {
-            this.mySchools = data.map(d => this.directorio[d]);
-            this.selectedSchool = this.mySchools && this.mySchools[0];
-            this.getDataFlujoEscolar2(this.selectedSchool)
-            this.validUserSubjet.next(true);
-          })
+        return ref.getDownloadURL().toPromise();
+      })
+      .then(url => {
+        return d3.tsv(url);
+      })
+      .then(data => {
+        // Download school directory ans create a map for each school id
+        data.forEach(d => {
+          this.directorio[d.rbd] = d;
         })
-      });
+        return this.getMySchools();
+      })
+      .then((data:[]) => {
+        if (data) {
+          this.mySchools = data.map(d => this.directorio[d]);
+          this.selectedSchool = this.mySchools && this.mySchools[0];
+          this.getDataFlujoEscolar2(this.selectedSchool)
+        }
+
+      })
+      .catch((err) => {
+        console.error(err);
+      })
 
     })
   }
@@ -173,6 +183,29 @@ export class DataService {
         reject(err);
       })
        
+    })
+  }
+
+  getValidUserData() {
+    return new Promise((resolve, reject) => {
+      if (this.user && this.user.email) {  
+        this.fireStore.collection("users").doc(this.user.email).get().subscribe((d) => {
+          const userData = d.data();
+          this.userData = userData;
+
+          if (userData && userData["schools"] && userData["schools"].length) {
+            this.validUserSubjet.next(true);
+            resolve(userData)
+          } else {
+            this.validUserSubjet.next(false);
+            reject("No schools")
+          }
+
+        },
+        err => {
+          reject(err)
+        })
+      }
     })
   }
 
