@@ -97,7 +97,7 @@
         <h5>Detalle de cada estudiante matriculado en 8º el año {{selectedYear}}</h5>
       </div>
       <div class="ibox-content">
-
+          <div class="text-muted">Para los estudiantes que se tiene registro de NEM (Notas de Enseñanza Media), estas se presentan junto con el precentil de egreso en la celda correspondiente a "IV"</div>
           <table class="table">
               <tr>
                 <th>Estudiante</th>
@@ -114,7 +114,7 @@
                   [ngClass]="studentItem.postBasica[colNum] && studentItem.postBasica[colNum].nivel"
                   [class.nem]="isNem(studentItem,colNum)"
                   
-                  >{{studentItem.postBasica[colNum] && cellLabel(studentItem.postBasica[colNum])}}
+                  >{{studentItem.postBasica[colNum] && cellLabel(studentItem.postBasica[colNum])}} {{isNem(studentItem,colNum) ? "("+infoNEM(studentItem)+")" : ""}}
                 </td>
               </tr>
             </table>

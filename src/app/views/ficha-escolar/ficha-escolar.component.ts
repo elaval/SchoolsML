@@ -39,7 +39,9 @@ export class FichaEscolarComponent implements OnInit {
             this.params = params;
             this.selectedYear = params.years && params.years[0];
     
-            this.selectedData = this.dataByYearDict[this.selectedYear]
+            this.selectedData = this.dataByYearDict[this.selectedYear];
+            this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+
           }
         })
       } else {
@@ -55,27 +57,13 @@ export class FichaEscolarComponent implements OnInit {
       
     })
 
-    /*
-    this.dataService.getDataFlujoEscolar()
-    .then((data:MatriculaData) => {
-      this.data = data;
-      this.processData(data)
-
-      this.dataService.params.subscribe(params => {
-        if (params) {
-          this.params = params;
-          this.selectedYear = params.years && params.years[0];
-  
-          this.selectedData = this.dataByYearDict[this.selectedYear]
-        }
-      })
-    })
-    */
-
     this.dataService.selectedYear.subscribe(year => {
       if (year) {
         this.selectedYear = year;
+
         this.selectedData = this.dataByYearDict && this.dataByYearDict[this.selectedYear]
+        this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+
       }
     })
 
@@ -100,7 +88,10 @@ export class FichaEscolarComponent implements OnInit {
     this.sortedProgramasEdSup = []
     if (programas) {
       this.sortedProgramasEdSup = _.chain(programas)
-      .map(d => d).sortBy(d => `${d.tipoInstitucion}`).value();
+      .map(d => d)
+      .sortBy(d => -d.numStudents)
+      .sortBy(d => `${d.tipoInstitucion}`)
+      .value();
     }
   }
 
@@ -137,6 +128,15 @@ export class FichaEscolarComponent implements OnInit {
  
   }
 
+  infoNEM(d) {
+    if (d && d.fullRecord && d.fullRecord.nem && d.fullRecord.nem.NEM ) {
+      //return `promedio NEM: ${d.fullRecord.nem.NEM}, percentil: ${d.fullRecord.nem.PERCENTIL}`
+      return `${d.fullRecord.nem.NEM}, p.${d.fullRecord.nem.PERCENTIL}`
+    } else {
+      return null
+    }
+ 
+  }
 
   
   studentDetailedInfo(d) {
@@ -158,11 +158,15 @@ export class FichaEscolarComponent implements OnInit {
     this.dataByYear = _.chain(data).map((items,key) => ({year: key, items:items})).value();
     this.dataByYearDict = data;
     this.selectedData = this.dataByYearDict[this.selectedYear]
+    this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+
 
   }
 
   changeYear() {
     this.selectedData = this.dataByYearDict[this.selectedYear]
+    this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+
   }
 
 

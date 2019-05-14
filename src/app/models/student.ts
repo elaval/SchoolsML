@@ -4,6 +4,7 @@ import { Compiler_compileModuleAndAllComponentsAsync__POST_R3__ } from '@angular
 export interface StudentYearRecord {
   id : any,
   mrun: string,
+  count_matricula_ed_superior: number,
   matricula_ed_superior: any[],
   matricula_escolar: any[],
   nem : {}
@@ -137,7 +138,7 @@ export class Student {
   }
 
   ingresoEdSuperior() {
-    return !!(this.record.fullRecord.matricula_ed_superior && this.record.fullRecord.matricula_ed_superior.length)
+    return !!(this.record.fullRecord.count_matricula_ed_superior || (this.record.fullRecord.matricula_ed_superior && this.record.fullRecord.matricula_ed_superior.length))
   }
 
   /**
