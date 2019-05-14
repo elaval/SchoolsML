@@ -102,7 +102,7 @@ export class DataService {
   getDataFlujoEscolar2(school) {
     this.getValidUserData()
     .then(() => {
-      this.data_flujo = [];
+      this.data_flujo = null;
       this.dataSubjet.next(this.data_flujo);
 
       const ref = this.storage.ref(`establecimientos/${school.rbd}/flujo8vo.json`);
