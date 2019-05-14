@@ -42,6 +42,11 @@ export class FichaEscolarComponent implements OnInit {
             this.selectedData = this.dataByYearDict[this.selectedYear]
           }
         })
+      } else {
+        this.data = null;
+        this.dataByYear = null;
+        this.dataByYearDict = null;
+        this.selectedData = null;    
       }
 
       this.dataService.validUser.subscribe(d => {

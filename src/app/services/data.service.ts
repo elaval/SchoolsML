@@ -13,6 +13,7 @@ import { FILE_DIRECTORIO_PATH } from '../config';
 import { getHeapStatistics } from 'v8';
 import { Student } from '../models/student';
 import { StudentCollection } from '../models/studentCollection';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 
 @Injectable({
@@ -86,6 +87,11 @@ export class DataService {
 
       })
       .catch((err) => {
+        this.mySchools = [];
+        this.selectedSchool = null;
+        this.allYears = null;
+        this.selectedYear = null;
+        this.dataSubjet.next(null);
         console.error(err);
       })
 
@@ -94,18 +100,20 @@ export class DataService {
 
   
   getDataFlujoEscolar2(school) {
-    const ref = this.storage.ref(`establecimientos/${school.rbd}/flujo8vo.json`);
-    ref.getDownloadURL().subscribe(url => {
-      this.http.get(url).toPromise()
-      .then(data => {
-        this.data_flujo = data;
-        this.getDataParameters(data);
-        this.dataSubjet.next(data);
+    this.getValidUserData()
+    .then(() => {
+      const ref = this.storage.ref(`establecimientos/${school.rbd}/flujo8vo.json`);
+      ref.getDownloadURL().subscribe(url => {
+        this.http.get(url).toPromise()
+        .then(data => {
+          this.data_flujo = data;
+          this.getDataParameters(data);
+          this.dataSubjet.next(data);
+        })
+        .catch(err => {
+          this.dataSubjet.error(err)
+        });
       })
-      .catch(err => {
-        this.dataSubjet.error(err)
-      });
-
     })
   }
 
