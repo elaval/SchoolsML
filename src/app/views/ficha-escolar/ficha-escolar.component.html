@@ -110,11 +110,13 @@
                     {{i+1}}) {{studentBasicInfo(studentItem)}}
                 </td>
                 <td *ngFor="let colNum of columnRange" 
-                  [matTooltip]="studentItem.postBasica[colNum] && cellTitle(studentItem.postBasica[colNum])"
+                  [matTooltip]="yearTooltip(studentItem,colNum)"
+
                   [ngClass]="studentItem.postBasica[colNum] && studentItem.postBasica[colNum].nivel"
                   [class.nem]="isNem(studentItem,colNum)"
-                  
+                  [class.titulo]="hasTitulo(studentItem,colNum)"
                   >{{studentItem.postBasica[colNum] && cellLabel(studentItem.postBasica[colNum])}} {{isNem(studentItem,colNum) ? "("+infoNEM(studentItem)+")" : ""}}
+                  {{hasTitulo(studentItem,colNum) ? "Título" : ""}}
                 </td>
               </tr>
             </table>

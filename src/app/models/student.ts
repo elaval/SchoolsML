@@ -7,7 +7,9 @@ export interface StudentYearRecord {
   count_matricula_ed_superior: number,
   matricula_ed_superior: any[],
   matricula_escolar: any[],
-  nem : {}
+  nem : {},
+  nemAdulto : {}
+
 }
 
 export interface StudentRecord {
@@ -134,7 +136,9 @@ export class Student {
   }
 
   terminoSecundaria() {
-    return !!(this.record.fullRecord.nem && this.record.fullRecord.nem["AGNO_EGRESO"]) || false;
+    const hasNemJoven = this.record.fullRecord.nem && this.record.fullRecord.nem["AGNO_EGRESO"];
+    const hasNemAdulto = this.record.fullRecord.nemAdulto && this.record.fullRecord.nemAdulto["agno_egreso"];
+    return hasNemJoven || hasNemAdulto ? true : false;
   }
 
   ingresoEdSuperior() {

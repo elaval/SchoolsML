@@ -115,10 +115,30 @@ export class FichaEscolarComponent implements OnInit {
     }
   }
 
+  yearTooltip(d,i) {
+    let msg = "";
+    if (d.postBasica[i] && this.cellTitle(d.postBasica[i])) {
+      msg = this.cellTitle(d.postBasica[i]);
+    }
+
+    const recordTitulo = this.cellInfoTitulo(d,i);
+    if (recordTitulo) {
+      msg += msg ? `, Título: ${recordTitulo}` : `Título: ${recordTitulo}`; 
+    }
+
+    return msg;
+  }
+
+  cellInfoTitulo(d,i) {
+    const recordTitulo = this.hasTitulo(d, i);
+    return recordTitulo ? recordTitulo.nomb_titulo_obtenido : "";
+  }
+
   isNem(d,i) {
     if (d && d.fullRecord) {
       const year = +this.selectedYear + i +1;
-      const yearEgreso = d.fullRecord.nem && +d.fullRecord.nem.AGNO_EGRESO;
+      const yearEgreso = (d.fullRecord.nem && +d.fullRecord.nem.AGNO_EGRESO) 
+        || (d.fullRecord.nemAdulto && +d.fullRecord.nemAdulto.agno_egreso);
       if (year == yearEgreso) {
         return true
       } else {
@@ -132,10 +152,37 @@ export class FichaEscolarComponent implements OnInit {
     if (d && d.fullRecord && d.fullRecord.nem && d.fullRecord.nem.NEM ) {
       //return `promedio NEM: ${d.fullRecord.nem.NEM}, percentil: ${d.fullRecord.nem.PERCENTIL}`
       return `${d.fullRecord.nem.NEM}, p.${d.fullRecord.nem.PERCENTIL}`
+    } else if (d && d.fullRecord && d.fullRecord.nemAdulto && d.fullRecord.nemAdulto.nem ){
+      return `${d.fullRecord.nemAdulto.nem}, p.${d.fullRecord.nemAdulto.percentil} A`
     } else {
       return null
     }
  
+  }
+
+  nemAdulto(d) {
+    if (d && d.fullRecord && d.fullRecord.nemAdulto && d.fullRecord.nemAdulto.nem ){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  hasTitulo(d, i) {
+    if (d && d.fullRecord && d.fullRecord.titulosEdSuperior) {
+      const year = +this.selectedYear + i +1;
+
+      const recordTitulo = _.find(d.fullRecord.titulosEdSuperior, e => {
+        return e.cat_periodo == "TIT_" + year;
+      })
+      if (recordTitulo) {
+        return recordTitulo
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   
