@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { FILE_DIRECTORIO_PATH } from '../config';
+import { FILE_DIRECTORIO_PATH, DEFAULT_FLOW_FILE } from '../config';
 import { getHeapStatistics } from 'v8';
 import { Student } from '../models/student';
 import { StudentCollection } from '../models/studentCollection';
@@ -105,17 +105,22 @@ export class DataService {
       this.data_flujo = null;
       this.dataSubjet.next(this.data_flujo);
 
-      const ref = this.storage.ref(`establecimientos/${school.rbd}/flujo8vo.json`);
-      ref.getDownloadURL().subscribe(url => {
-        this.http.get(url).toPromise()
-        .then(data => {
-          this.data_flujo = data;
-          this.getDataParameters(data);
-          this.dataSubjet.next(data);
+      // Get the schools valid filename with flow information 
+      this.fireStore.collection("schools").doc(school.rbd).get().subscribe((d) => {
+        const flowFile = d.data().dataFile || DEFAULT_FLOW_FILE;
+        const ref = this.storage.ref(`establecimientos/${school.rbd}/${flowFile}`);
+        ref.getDownloadURL().subscribe(url => {
+          this.http.get(url).toPromise()
+          .then(data => {
+            this.data_flujo = data;
+            this.getDataParameters(data);
+            this.dataSubjet.next(data);
+          })
+          .catch(err => {
+            this.dataSubjet.error(err)
+          });
         })
-        .catch(err => {
-          this.dataSubjet.error(err)
-        });
+
       })
     })
   }
