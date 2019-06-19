@@ -40,7 +40,7 @@ export class FichaEscolarComponent implements OnInit {
             this.selectedYear = params.years && params.years[0];
     
             this.selectedData = this.dataByYearDict[this.selectedYear];
-            this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+            this.selectedData = _.sortBy(this.selectedData, d => this.getNotaNem(d))
 
           }
         })
@@ -62,7 +62,7 @@ export class FichaEscolarComponent implements OnInit {
         this.selectedYear = year;
 
         this.selectedData = this.dataByYearDict && this.dataByYearDict[this.selectedYear]
-        this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+        this.selectedData = _.sortBy(this.selectedData, d => this.getNotaNem(d))
 
       }
     })
@@ -205,14 +205,21 @@ export class FichaEscolarComponent implements OnInit {
     this.dataByYear = _.chain(data).map((items,key) => ({year: key, items:items})).value();
     this.dataByYearDict = data;
     this.selectedData = this.dataByYearDict[this.selectedYear]
-    this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+    this.selectedData = _.sortBy(this.selectedData, d => this.getNotaNem(d))
+  }
 
-
+  /**
+   * Obtiene la nota de EM, ya sea del registro de jóvenes o de adulto
+   * @param d 
+   */
+  getNotaNem(d) {
+    return (d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM) ||
+          (d && d.fullRecord && d.fullRecord.nemAdulto && -d.fullRecord.nemAdulto.nem)
   }
 
   changeYear() {
     this.selectedData = this.dataByYearDict[this.selectedYear]
-    this.selectedData = _.sortBy(this.selectedData, d => d && d.fullRecord && d.fullRecord.nem && -d.fullRecord.nem.NEM)
+    this.selectedData = _.sortBy(this.selectedData, d => this.getNotaNem(d))
 
   }
 
