@@ -8,7 +8,8 @@ export interface StudentYearRecord {
   matricula_ed_superior: any[],
   matricula_escolar: any[],
   nem : {},
-  nemAdulto : {}
+  nemAdulto : {},
+  titulosEdSuperior:any[]
 
 }
 
@@ -143,6 +144,10 @@ export class Student {
 
   ingresoEdSuperior() {
     return !!(this.record.fullRecord.count_matricula_ed_superior || (this.record.fullRecord.matricula_ed_superior && this.record.fullRecord.matricula_ed_superior.length))
+  }
+
+  tieneTituloEdSuperior() {
+    return this.record.fullRecord.titulosEdSuperior && this.record.fullRecord.titulosEdSuperior.length
   }
 
   /**

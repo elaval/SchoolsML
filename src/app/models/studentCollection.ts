@@ -25,6 +25,9 @@ export class StudentCollection {
     statistics["edsup"] = _.reduce(this.students, (memo, d:Student) => {
       return memo + (d.ingresoEdSuperior() ? 1 : 0);
     }, 0);
+    statistics["tituloEdsup"] = _.reduce(this.students, (memo, d:Student) => {
+      return memo + (d.tieneTituloEdSuperior() ? 1 : 0);
+    }, 0);
 
     return statistics
 
