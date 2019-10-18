@@ -188,7 +188,7 @@ export class FichaEscolarComponent implements OnInit {
   
   studentDetailedInfo(d) {
     if (d && d.record8vo) {
-      return `${d.record8vo.gen_alu == "1" ? "Hombre" : "Mujer"}, ${d.record8vo.edad_alu} años (${d.record8vo.gen_alu == "1" ? "Nacido" : "Nacida"}: ${moment(d.record8vo.fec_nac_alu,"YYYYMMDD").format("MMM YYYY")})`
+      return `${d.record8vo.gen_alu == "1" ? "Hombre" : "Mujer"}, ${d.record8vo.edad_alu} años (${d.record8vo.gen_alu == "1" ? "Nacido" : "Nacida"}: ${moment(d.record8vo.fec_nac_alu,"YYYYMMDD").format("DD MMM YYYY")})`
     }
   }
 
